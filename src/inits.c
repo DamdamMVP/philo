@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 11:51:11 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/12 12:50:09 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:22:15 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	init_params(t_params *params, int ac, char **av)
 		params->nb_ph_must_eat = ft_atoi(av[5]);
 	else
 		params->nb_ph_must_eat = -1;
-
 	printf("Params initialized:\n");
 	printf("Number of philosophers: %d\n", params->nb_ph);
 	printf("Time to die: %d\n", params->die_t);
