@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 11:51:11 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/12 15:22:15 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:27:08 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ int	args_are_correct(int ac, char **av)
 	return (1);
 }
 
-void	init_params(t_params *params, int ac, char **av)
+int	init_params(t_params *params, int ac, char **av)
 {
+	if (pthread_mutex_init(&params->print_mutex, NULL) != 0)
+		return (ft_error("Mutex initialization failed\n"), 0);
 	params->nb_ph = ft_atoi(av[1]);
 	params->die_t = ft_atoi(av[2]);
 	params->eat_t = ft_atoi(av[3]);
@@ -82,12 +84,7 @@ void	init_params(t_params *params, int ac, char **av)
 		params->nb_ph_must_eat = ft_atoi(av[5]);
 	else
 		params->nb_ph_must_eat = -1;
-	printf("Params initialized:\n");
-	printf("Number of philosophers: %d\n", params->nb_ph);
-	printf("Time to die: %d\n", params->die_t);
-	printf("Time to eat: %d\n", params->eat_t);
-	printf("Time to sleep: %d\n", params->sleep_t);
-	printf("Number of times each philosopher must eat: %d\n", params->nb_ph_must_eat);
+	return (1);
 }
 
 t_philo	*init_philo(t_params *params)
@@ -116,14 +113,6 @@ t_philo	*init_philo(t_params *params)
 		else
 			philos[i].right_fork = &philos[i + 1].left_fork;
 		i++;
-	}
-	for (int i = 0; i < params->nb_ph; i++)
-	{
-		printf("Philosopher %d initialized:\n", philos[i].id);
-		printf("  Left fork mutex address: %p\n", (void *)&philos[i].left_fork);
-		printf("  Right fork mutex address: %p\n", (void *)philos[i].right_fork);
-		printf("  Number of times eaten: %d\n", philos[i].nb_eat);
-		printf("  Last time eaten: %ld\n", philos[i].last_eat_t);
 	}
 	return (philos);
 }
