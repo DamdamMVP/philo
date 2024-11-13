@@ -6,11 +6,21 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 11:50:40 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/12 12:43:17 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/13 10:12:15 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_strcmp(const char *str1, const char *str2)
+{
+	size_t	i;
+
+	i = 0;
+	while (str1[i] && str2[i] && str1[i] == str2[i])
+		i++;
+	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
+}
 
 int	ft_strlen(const char *s)
 {

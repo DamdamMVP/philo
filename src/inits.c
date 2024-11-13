@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 11:51:11 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/12 16:27:08 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:11:37 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,15 @@ int	args_are_correct(int ac, char **av)
 
 int	init_params(t_params *params, int ac, char **av)
 {
-	if (pthread_mutex_init(&params->print_mutex, NULL) != 0)
+	if (pthread_mutex_init(&params->print_mutex, NULL) != 0
+		|| pthread_mutex_init(&params->update_mutex, NULL) != 0)
 		return (ft_error("Mutex initialization failed\n"), 0);
 	params->nb_ph = ft_atoi(av[1]);
 	params->die_t = ft_atoi(av[2]);
 	params->eat_t = ft_atoi(av[3]);
 	params->sleep_t = ft_atoi(av[4]);
 	params->start_t = get_current_time_in_ms();
+	params->simulation_end = 0;
 	if (ac == 6)
 		params->nb_ph_must_eat = ft_atoi(av[5]);
 	else
