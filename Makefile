@@ -35,6 +35,9 @@ fclean: clean
 
 re: fclean all
 
+debug: CFLAGS += -fsanitize=thread
+debug: re
+
 norminette:
 	@echo "Norminette de $(NAME) dans $(SRCDIR) et $(INCDIR)..."
 	@if norminette $(SRCDIR)/*.c $(INCDIR)/*.h | grep -v "OK!" | grep -q "Error!"; then \

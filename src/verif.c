@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 18:57:29 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/13 18:59:20 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/13 19:58:06 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	is_alone(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->left_fork);
 		print_status(philo, "has taken a fork");
-		usleep(philo->params->die_t * 1000);
+		usleep(philo->params->die_t * 1005);
 		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_lock(&philo->params->update_mutex);
 		philo->params->simulation_end = 1;
