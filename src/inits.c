@@ -6,70 +6,11 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 11:51:11 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/13 13:43:27 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/13 19:15:49 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	is_positive_number(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str || !str[0])
-		return (0);
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	ft_atoi(const char *str)
-{
-	int	i;
-	int	sign;
-	int	result;
-
-	i = 0;
-	sign = 1;
-	result = 0;
-	while (str[i] == ' ' || ('\t' <= str[i] && str[i] <= '\r'))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -sign;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + (str[i] - '0');
-		i++;
-	}
-	return (result * sign);
-}
-
-int	args_are_correct(int ac, char **av)
-{
-	int	i;
-
-	i = 1;
-	if (ac != 5 && ac != 6)
-		return (ft_error("Numbers of arguments diff than 5 or 6\n"), 0);
-	while (i < ac)
-	{
-		if (!is_positive_number(av[i]))
-			return (ft_error("Arguments must be positive integers\n"), 0);
-		if (ft_atoi(av[i]) <= 0)
-			return (ft_error("Arguments must be greater than 0\n"), 0);
-		i++;
-	}
-	return (1);
-}
 
 int	init_params(t_params *params, int ac, char **av)
 {
@@ -110,11 +51,10 @@ t_philo	*init_philo(t_params *params)
 				pthread_mutex_destroy(&philos[i].left_fork);
 			return (ft_error("Mutex init failed\n"), free(philos), NULL);
 		}
-		if (i == params->nb_ph - 1)
-			philos[i].right_fork = &philos[0].left_fork;
+		if (i++ == params->nb_ph - 1)
+			philos[i - 1].right_fork = &philos[0].left_fork;
 		else
-			philos[i].right_fork = &philos[i + 1].left_fork;
-		i++;
+			philos[i - 1].right_fork = &philos[1 + i - 1].left_fork;
 	}
 	return (philos);
 }

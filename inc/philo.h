@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 14:03:27 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/13 12:11:21 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/13 19:16:26 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,12 @@ typedef struct s_philo
 	struct s_params	*params;
 }	t_philo;
 
+// main.c
+void	*routine(void *arg);
+void	*monitor_all(void *arg);
+
 // inits.c
 int		is_positive_number(char *str);
-int		ft_atoi(const char *str);
 int		args_are_correct(int ac, char **av);
 int		init_params(t_params *params, int ac, char **av);
 t_philo	*init_philo(t_params *params);
@@ -53,10 +56,21 @@ int		ft_strlen(const char *s);
 void	ft_error(const char *message);
 long	get_current_time_in_ms(void);
 int		ft_strcmp(const char *str1, const char *str2);
+int		ft_atoi(const char *str);
 
-int		should_terminate(t_philo *philo);
+// actions.c
 void	take_forks(t_philo *philo);
-void	eat(t_philo *philo);
+void	try_to_eat(t_philo *philo);
 void	put_down_forks(t_philo *philo);
 void	print_status(t_philo *philo, char *status);
-void	*routine(void *arg);
+
+// threads.c
+void	create_threads(t_philo *philos);
+void	wait_threads(t_philo *philos);
+void	destroy_mutexes(t_philo *philos);
+
+// verif.c
+int		is_positive_number(char *str);
+int		args_are_correct(int ac, char **av);
+int		is_alone(t_philo *philo);
+int		should_terminate(t_philo *philo);

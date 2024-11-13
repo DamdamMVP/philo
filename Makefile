@@ -7,7 +7,7 @@ SRCDIR		=	src
 INCDIR		=	inc
 OBJDIR		=	obj
 
-SRC			=	main inits utils
+SRC			=	main inits utils verif actions threads
 SRCS		=	$(addprefix $(SRCDIR)/, $(addsuffix .c, $(SRC)))
 OBJS		=	$(addprefix $(OBJDIR)/, $(SRC:=.o))
 
