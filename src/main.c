@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 14:03:15 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/13 12:17:48 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:10:18 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,26 @@ void	take_forks(t_philo *philo)
 {
 	if (should_terminate(philo))
 		return ;
-	pthread_mutex_lock(&philo->left_fork);
-	print_status(philo, "has taken a left fork");
-	pthread_mutex_lock(philo->right_fork);
-	print_status(philo, "has taken a right fork");
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->right_fork);
+		print_status(philo, "has taken a right fork");
+		pthread_mutex_lock(&philo->left_fork);
+		print_status(philo, "has taken a left fork");
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->left_fork);
+		print_status(philo, "has taken a left fork");
+		pthread_mutex_lock(philo->right_fork);
+		print_status(philo, "has taken a right fork");
+	}
 }
 
 void	eat(t_philo *philo)
 {
 	if (should_terminate(philo))
 		return ;
-	
 	print_status(philo, "is eating");
 	pthread_mutex_lock(&philo->params->update_mutex);
 	philo->last_eat_t = get_current_time_in_ms() + philo->params->eat_t;
@@ -44,18 +53,26 @@ void	eat(t_philo *philo)
 	if (philo->params->nb_ph_must_eat != -1 && philo->nb_eat >= philo->params->nb_ph_must_eat)
 	{
 		philo->params->stomach_full++;
+		philo->nb_eat = -1;
+		printf("Philo %i a fini de manger, nbr restant : %i\n", philo->id, philo->params->nb_ph - philo->params->stomach_full);
 		if (philo->params->stomach_full == philo->params->nb_ph)
 			philo->params->simulation_end = 1;
 	}
+	// printf("Philo %i doit poser la fourchette a : %ld\n", philo->id, philo->last_eat_t - philo->params->start_t);
+	// printf("Attente estimer : %i\n", philo->params->eat_t);
 	pthread_mutex_unlock(&philo->params->update_mutex);
 	usleep(philo->params->eat_t * 1000);
+	
+	pthread_mutex_lock(&philo->params->update_mutex);
+	// printf("Philo %i sort de eat a : %ld\n", philo->id, get_current_time_in_ms() - philo->params->start_t);
+	pthread_mutex_unlock(&philo->params->update_mutex);
 }
 
 void	put_down_forks(t_philo *philo)
 {
 	print_status(philo, "has put down right fork");
-	print_status(philo, "has put down left fork");
 	pthread_mutex_unlock(philo->right_fork);
+	print_status(philo, "has put down left fork");
 	pthread_mutex_unlock(&philo->left_fork);
 }
 
@@ -83,7 +100,7 @@ void	*routine(void *arg)
 		usleep((philo->params->eat_t / 2) * 1000);
 	while (1)
 	{
-		if (should_terminate(philo))
+		if (philo->nb_eat == -1)
 			break ;
 		print_status(philo, "is thinking");
 		take_forks(philo);
@@ -158,9 +175,12 @@ void	*monitor_all(void *arg)
 		i = 0;
 		while (i < philos[0].params->nb_ph)
 		{
+			if (should_terminate(&philos[i]))
+				return (NULL);
 			pthread_mutex_lock(&philos[i].params->update_mutex);
-			if (get_current_time_in_ms() - philos[i].last_eat_t > philos[i].params->die_t)
+			if (get_current_time_in_ms() > philos[i].last_eat_t + philos[i].params->die_t)
 			{
+				printf("Someone die.... | id : %i | ms : %li\n", philos[i].id, get_current_time_in_ms() - philos[0].params->start_t);
 				philos[i].params->simulation_end = 1;
 				pthread_mutex_unlock(&philos[i].params->update_mutex);
 				print_status(&philos[i], "died");
