@@ -38,6 +38,9 @@ re: fclean all
 debug: CFLAGS += -fsanitize=thread
 debug: re
 
+leak: CFLAGS += -fsanitize=leak
+leak: re
+
 norminette:
 	@echo "Norminette de $(NAME) dans $(SRCDIR) et $(INCDIR)..."
 	@if norminette $(SRCDIR)/*.c $(INCDIR)/*.h | grep -v "OK!" | grep -q "Error!"; then \
@@ -53,4 +56,4 @@ norminette:
 		echo "\033[0;32mAll files are norminette friendly !\033[0m"; \
 	fi
 
-.PHONY: all clean fclean re norminette
+.PHONY: all clean fclean re norminette leak debug

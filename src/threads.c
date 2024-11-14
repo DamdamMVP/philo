@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 19:01:01 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/13 19:02:01 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:06:37 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	create_threads(t_philo *philos)
 	{
 		if (pthread_create(&philos[i].thread, NULL, &routine, &philos[i]) != 0)
 		{
-			perror("Failed to create thread");
-			exit(1);
+			ft_error("Failed to create thread");
+			return ;
 		}
 		i++;
 	}
@@ -41,8 +41,8 @@ void	wait_threads(t_philo *philos)
 	{
 		if (pthread_join(philos[i].thread, NULL) != 0)
 		{
-			perror("Failed to join thread");
-			exit(1);
+			ft_error("Failed to join thread");
+			return ;
 		}
 		i++;
 	}

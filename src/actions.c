@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 19:00:36 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/14 00:47:14 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:56:49 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ void	try_to_eat(t_philo *philo)
 void	put_down_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->left_fork);
-	print_status(philo, "has poser a fork");
 	pthread_mutex_unlock(philo->right_fork);
-	print_status(philo, "has poser a fork");
 }
 
 void	print_status(t_philo *philo, char *status)

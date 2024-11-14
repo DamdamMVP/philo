@@ -6,7 +6,7 @@
 /*   By: dalebran <dalebran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 14:03:15 by dalebran          #+#    #+#             */
-/*   Updated: 2024/11/13 19:16:11 by dalebran         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:03:07 by dalebran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int ac, char **av)
 	create_threads(philos);
 	if (pthread_create(&monitor_thread, NULL, &monitor_all, philos) != 0)
 	{
-		perror("Failed to create monitor thread");
+		ft_error("Failed to create monitor thread");
 		destroy_mutexes(philos);
 		free(philos);
 		return (1);
